@@ -206,7 +206,7 @@ CMD ["./chaincode"]
 
 ## 4. Flujo de Ejecución del Script `build_qorichaincode.sh`
 
-1. **Generación con Here-Docs (`cat << 'EOF'`)**: Garantiza que no ocurran expansiones de variables de shell no deseadas durante la escritura de los archivos Go.
-2. **Aislamiento**: Crea la carpeta `qorichaincode/` garantizando un módulo de Go autocontenido.
+1. **Generación con Here-Docs (`cat << 'EOF'`)**: Genera los archivos directamente en la raíz de `QoriChainCode` sin crear subcarpetas redundantes.
+2. **Contexto Limpio**: Usa `.dockerignore` para enviar al contexto de construcción de Docker únicamente los archivos fuente relevantes.
 3. **Construcción en Docker**: Ejecuta `docker build`, validando en tiempo real la descarga del SDK de Fabric y la compilación exitosa.
 4. **Idempotencia y Limpieza**: Al terminar la validación, elimina la imagen generada (`qorichaincode-builder`) para no dejar residuos en el disco local.

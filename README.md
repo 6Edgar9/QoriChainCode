@@ -33,17 +33,19 @@
 
 ## 📁 Estructura del Repositorio
 
+Todos los archivos del contrato y herramientas residen directamente en la raíz de **QoriChainCode**:
+
 ```text
 .
 ├── LICENSE                      # Licencia Apache 2.0
 ├── README.md                    # Documentación general del proyecto
 ├── EXPLANATION.md               # Análisis técnico detallado de la arquitectura y código
 ├── build_qorichaincode.sh       # Script unificado de generación y compilación con Docker
-├── .gitignore                   # Exclusiones de Git para binarios, logs y artefactos
-└── qorichaincode/               # Código fuente del Chaincode Go
-    ├── Dockerfile.build         # Entorno efímero de validación y compilación (Alpine + Go 1.20)
-    ├── main.go                  # Punto de entrada y arranque del chaincode
-    └── smartcontract.go         # Lógica de negocio, validación de estado y consultas
+├── Dockerfile.build             # Entorno efímero de validación y compilación (Alpine + Go 1.20)
+├── main.go                      # Punto de entrada y arranque del chaincode (Fabric Contract API)
+├── smartcontract.go             # Lógica de negocio, validación de nullifiers y consultas
+├── .dockerignore                # Archivos excluidos del contexto de compilación en Docker
+└── .gitignore                   # Exclusiones de Git para binarios, logs y artefactos
 ```
 
 ---
@@ -84,7 +86,7 @@ chmod +x build_qorichaincode.sh
 ```
 
 ### ¿Qué hace el script?
-1. Escribe o actualiza los archivos fuente dentro de la carpeta `qorichaincode/`.
+1. Escribe o actualiza los archivos fuente directamente en la raíz de `QoriChainCode`.
 2. Lanza una compilación en contenedor basado en `golang:1.20-alpine`.
 3. Ejecuta `go mod init qorichaincode` y `go mod tidy` descargando el SDK oficial de Fabric.
 4. Compila un binario estático con `CGO_ENABLED=0` (`go build -v -ldflags="-s -w" -o chaincode .`).
@@ -97,8 +99,7 @@ chmod +x build_qorichaincode.sh
 Para empaquetar y desplegar el chaincode en un canal de Fabric v2.5:
 
 ```bash
-# 1. Empaquetar el chaincode
-cd qorichaincode
+# 1. Empaquetar el chaincode desde la raíz
 peer lifecycle chaincode package qorichaincode.tar.gz \
   --path . \
   --lang golang \

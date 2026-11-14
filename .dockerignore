@@ -1,0 +1,6 @@
+.git
+.gitignore
+.dockerignore
+*.md
+LICENSE
+build_qorichaincode.sh

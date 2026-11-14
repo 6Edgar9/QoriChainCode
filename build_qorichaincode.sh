@@ -7,17 +7,14 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TARGET_DIR="${SCRIPT_DIR}/qorichaincode"
+TARGET_DIR="${SCRIPT_DIR}"
 IMAGE_TAG="qorichaincode-builder"
 
 echo "========================================================================"
 echo " [QoriChain] Iniciando generación y validación de QoriChaincode..."
 echo "========================================================================"
 
-# 1. Crear estructura de directorios
-mkdir -p "${TARGET_DIR}"
-
-# 2. Generar main.go
+# 1. Generar main.go
 cat << 'EOF' > "${TARGET_DIR}/main.go"
 package main
 
@@ -40,7 +37,7 @@ func main() {
 }
 EOF
 
-# 3. Generar smartcontract.go
+# 2. Generar smartcontract.go
 cat << 'EOF' > "${TARGET_DIR}/smartcontract.go"
 package main
 
@@ -147,7 +144,7 @@ func (s *SmartContract) QueryTally(ctx contractapi.TransactionContextInterface) 
 }
 EOF
 
-# 4. Generar Dockerfile.build
+# 3. Generar Dockerfile.build
 cat << 'EOF' > "${TARGET_DIR}/Dockerfile.build"
 FROM golang:1.20-alpine
 
@@ -167,10 +164,9 @@ RUN go mod init qorichaincode && \
 CMD ["./chaincode"]
 EOF
 
-echo "[+] Archivos generados correctamente en '${TARGET_DIR}':"
-ls -la "${TARGET_DIR}"
+echo "[+] Código fuente y Dockerfile listos en '${TARGET_DIR}'"
 
-# 5. Compilar contrato dentro de contenedor Docker efímero
+# 4. Compilar contrato dentro de contenedor Docker efímero
 echo ""
 echo "========================================================================"
 echo " [Docker Build] Compilando y validando integridad en golang:1.20-alpine..."
@@ -179,12 +175,12 @@ echo "========================================================================"
 cd "${TARGET_DIR}"
 docker build -f Dockerfile.build -t "${IMAGE_TAG}" .
 
-# 6. Limpieza de imágenes residuales
+# 5. Limpieza de imágenes residuales
 echo ""
 echo "[+] Limpiando imagen Docker temporal '${IMAGE_TAG}'..."
 docker rmi "${IMAGE_TAG}"
 
-# 7. Mensaje de éxito de arquitectura
+# 6. Mensaje de éxito de arquitectura
 echo ""
 echo "========================================================================"
 echo " [ÉXITO] QoriChaincode ha sido verificado y compilado satisfactoriamente."
