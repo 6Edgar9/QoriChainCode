@@ -1,0 +1,16 @@
+FROM golang:1.20-alpine
+
+# Paquetes requeridos para resolución de dependencias por git
+RUN apk add --no-cache git build-base
+
+WORKDIR /app
+
+# Copiar el código fuente
+COPY . .
+
+# Inicializar módulo, sincronizar SDK de Fabric y compilar binario
+RUN go mod init qorichaincode && \
+    go mod tidy && \
+    CGO_ENABLED=0 GOOS=linux go build -v -ldflags="-s -w" -o chaincode .
+
+CMD ["./chaincode"]

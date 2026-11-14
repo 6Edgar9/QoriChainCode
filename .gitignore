@@ -1,0 +1,38 @@
+# Binarios de Go y compilaciones
+chaincode
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Módulos y dependencias de Go locales
+vendor/
+
+# Paquetes de Chaincode empaquetados para Fabric
+*.tar.gz
+*.tgz
+*.block
+
+# Logs y depuración
+*.log
+
+# Archivos de entorno y configuración sensible
+.env
+.env.*
+!.env.example
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos del Sistema Operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
